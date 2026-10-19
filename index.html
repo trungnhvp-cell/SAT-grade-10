@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAT Math 10 — Thầy Nguyễn Hữu Trung | THPT Trần Phú</title>
+<style>
+:root{
+  --navy:#0C2340; --navy2:#163a5f; --blue:#1E88E5; --blue-l:#E3F2FD;
+  --bg:#F4F6FA; --text:#1a1a1a; --muted:#5a6c7d; --line:#d9e0e8;
+  --ok:#2E7D32; --ok-bg:#E8F5E9; --err:#C62828; --err-bg:#FFEBEE; --warn:#EF6C00;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* ---------- HEADER ---------- */
+header{background:var(--navy);color:#fff;padding:16px 24px;display:flex;
+  justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
+  border-bottom:4px solid var(--blue);position:sticky;top:0;z-index:200}
+.brand{font-size:1.35em;font-weight:800;letter-spacing:1px}
+.brand span{color:#64B5F6}
+.teacher{font-size:.85em;opacity:.92;text-align:right}
+.teacher strong{color:#fff}
+
+/* ---------- HERO ---------- */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);
+  color:#fff;padding:64px 24px;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;bottom:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--blue),#64B5F6,var(--blue))}
+.hero h1{font-size:2.4em;margin-bottom:14px;font-weight:800}
+.hero p{max-width:760px;margin:0 auto;opacity:.92;font-size:1.08em}
+.hero .badge{display:inline-block;background:rgba(100,181,246,.18);
+  border:1px solid rgba(100,181,246,.5);padding:6px 18px;border-radius:20px;
+  margin-top:20px;font-size:.88em;letter-spacing:1.5px}
+
+/* ---------- CONTAINER / SECTION ---------- */
+.container{max-width:1120px;margin:0 auto;padding:0 24px}
+section{padding:56px 0}
+section h2{font-size:1.85em;color:var(--navy);font-weight:800;margin-bottom:6px}
+section h2::after{content:"";display:block;width:60px;height:4px;background:var(--blue);
+  margin-top:10px;border-radius:2px}
+.section-sub{color:var(--muted);margin:16px 0 28px;font-size:1.02em}
+
+/* ---------- TOPIC GRID ---------- */
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.topic-card{display:block;background:#fff;border:1px solid var(--line);border-radius:12px;
+  padding:22px;text-decoration:none;color:var(--text);position:relative;overflow:hidden;
+  transition:transform .2s,box-shadow .2s,border-color .2s}
+.topic-card::before{content:"";position:absolute;top:0;left:0;bottom:0;width:4px;
+  background:var(--blue);transform:scaleY(0);transform-origin:bottom;transition:transform .25s}
+.topic-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(12,35,64,.12);
+  border-color:var(--blue)}
+.topic-card:hover::before{transform:scaleY(1)}
+.topic-num{font-size:.78em;font-weight:700;color:var(--blue);letter-spacing:2px}
+.topic-card h3{font-size:1.05em;color:var(--navy);margin:8px 0 12px;font-weight:700;line-height:1.4}
+.topic-card .go{font-size:.85em;color:var(--blue);font-weight:600}
+
+/* ---------- TABS ---------- */
+.tabs{display:inline-flex;gap:6px;margin-bottom:22px;background:#fff;padding:8px;
+  border-radius:12px;border:1px solid var(--line);flex-wrap:wrap}
+.tab{padding:10px 26px;border:none;background:transparent;border-radius:8px;
+  font-size:.95em;font-weight:600;color:var(--muted);cursor:pointer;transition:.2s}
+.tab:hover{color:var(--navy);background:var(--blue-l)}
+.tab.active{background:var(--navy);color:#fff}
+
+/* ---------- QUESTION ---------- */
+.q{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px;margin-bottom:14px}
+.q.correct{border-color:var(--ok);background:#FAFFFA}
+.q.wrong{border-color:var(--err);background:#FFFAFA}
+.q-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.q-num{flex-shrink:0;width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9em}
+.q.correct .q-num{background:var(--ok)}
+.q.wrong .q-num{background:var(--err)}
+.q-text{flex:1;font-size:1.03em;font-weight:500;padding-top:2px}
+.q-type{display:inline-block;font-size:.68em;font-weight:700;letter-spacing:.5px;
+  text-transform:uppercase;background:var(--blue-l);color:var(--blue);
+  padding:2px 8px;border-radius:4px;margin-bottom:6px}
+.q-type.fill{background:#FFF3E0;color:var(--warn)}
+
+/* ---------- OPTIONS ---------- */
+.options{display:grid;gap:8px;margin-left:48px}
+.option{display:flex;align-items:center;gap:12px;padding:12px 16px;border:2px solid var(--line);
+  border-radius:10px;cursor:pointer;transition:.15s;background:#fff}
+.option:hover{border-color:var(--blue);background:#FAFCFF}
+.option input{display:none}
+.option .letter{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85em;
+  color:var(--muted);flex-shrink:0;transition:.15s}
+.option.selected{border-color:var(--blue);background:var(--blue-l)}
+.option.selected .letter{background:var(--blue);border-color:var(--blue);color:#fff}
+.option.correct-opt{border-color:var(--ok)!important;background:var(--ok-bg)!important}
+.option.correct-opt .letter{background:var(--ok)!important;border-color:var(--ok)!important;color:#fff!important}
+.option.wrong-opt{border-color:var(--err)!important;background:var(--err-bg)!important}
+.option.wrong-opt .letter{background:var(--err)!important;border-color:var(--err)!important;color:#fff!important}
+
+/* ---------- FILL ---------- */
+.fill-input{margin-left:48px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.fill-input input{padding:12px 16px;border:2px solid var(--line);border-radius:10px;
+  font-size:1em;font-family:inherit;width:240px;transition:.15s}
+.fill-input input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(30,136,229,.15)}
+.fill-input input.correct-input{border-color:var(--ok);background:var(--ok-bg)}
+.fill-input input.wrong-input{border-color:var(--err);background:var(--err-bg)}
+.answer-feedback{margin-left:48px;margin-top:12px;padding:12px 16px;border-radius:8px;
+  font-size:.9em;display:none}
+.answer-feedback.show{display:block}
+.answer-feedback.correct{background:var(--ok-bg);color:var(--ok);border-left:4px solid var(--ok)}
+.answer-feedback.wrong{background:var(--err-bg);color:var(--err);border-left:4px solid var(--err)}
+.answer-feedback a{color:var(--blue);font-weight:700;text-decoration:none}
+.answer-feedback a:hover{text-decoration:underline}
+
+/* ---------- SUBMIT BAR ---------- */
+.submit-bar{position:sticky;bottom:0;background:#fff;padding:18px 24px;border-top:2px solid var(--line);
+  text-align:center;margin:28px -24px 0;z-index:100;box-shadow:0 -4px 12px rgba(0,0,0,.05);
+  display:flex;justify-content:center;align-items:center;gap:24px;flex-wrap:wrap}
+.progress-info{font-size:.9em;color:var(--muted);font-weight:600}
+.progress-info span{color:var(--navy);font-weight:800}
+.btn-submit{background:var(--blue);color:#fff;border:none;padding:14px 44px;font-size:1.05em;
+  font-weight:700;border-radius:10px;cursor:pointer;transition:.2s;letter-spacing:.5px}
+.btn-submit:hover{background:var(--navy);transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(30,136,229,.3)}
+.btn-submit:disabled{background:var(--muted);cursor:not-allowed;transform:none;box-shadow:none}
+
+/* ---------- RESULTS ---------- */
+.results{background:#fff;border:2px solid var(--navy);border-radius:16px;padding:30px;
+  margin-bottom:28px;display:none}
+.results.show{display:block;animation:slide .4s ease}
+@keyframes slide{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.results h3{color:var(--navy);font-size:1.5em;margin-bottom:18px}
+.score-box{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+.score-item{flex:1;min-width:130px;text-align:center;padding:18px;border-radius:12px;background:var(--bg)}
+.score-item .num{font-size:2.2em;font-weight:800;color:var(--navy)}
+.score-item .label{font-size:.82em;color:var(--muted);text-transform:uppercase;
+  letter-spacing:1px;font-weight:600}
+.score-item.correct-score .num{color:var(--ok)}
+.score-item.wrong-score .num{color:var(--err)}
+.review-section{margin-top:20px;padding-top:20px;border-top:1px solid var(--line)}
+.review-section h4{font-size:1.08em;color:var(--navy);margin-bottom:12px}
+.review-topic{display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;background:var(--err-bg);border-radius:10px;margin-bottom:8px;
+  flex-wrap:wrap;gap:12px}
+.review-topic .info{flex:1}
+.review-topic .info strong{color:var(--err);display:block;margin-bottom:2px}
+.review-topic .info span{font-size:.85em;color:var(--muted)}
+.review-topic a{background:var(--blue);color:#fff;padding:8px 16px;border-radius:8px;
+  text-decoration:none;font-weight:600;font-size:.88em;white-space:nowrap}
+.review-topic a:hover{background:var(--navy)}
+.perfect{text-align:center;padding:22px;background:var(--ok-bg);border-radius:12px;
+  color:var(--ok);font-weight:700;font-size:1.1em}
+.btn-reset{background:transparent;border:2px solid var(--navy);color:var(--navy);
+  padding:10px 24px;border-radius:8px;font-weight:700;cursor:pointer;margin-top:16px}
+.btn-reset:hover{background:var(--navy);color:#fff}
+
+/* ---------- FOOTER ---------- */
+footer{background:var(--navy);color:#fff;padding:38px 24px;text-align:center;margin-top:50px}
+footer .fbrand{font-size:1.15em;font-weight:700;margin-bottom:6px}
+footer .fbrand span{color:#64B5F6}
+footer p{opacity:.85;font-size:.9em;margin:3px 0}
+footer .contact{margin-top:10px;font-size:.95em}
+footer .contact a{color:#64B5F6;text-decoration:none}
+
+@media(max-width:600px){
+  .hero h1{font-size:1.8em}section h2{font-size:1.5em}
+  header{flex-direction:column;text-align:center}.teacher{text-align:center}
+  .options,.fill-input,.answer-feedback{margin-left:0}
+  .score-box{flex-direction:column;gap:10px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">SAT <span>MATH 10</span></div>
+  <div class="teacher">
+    <strong>Thầy Nguyễn Hữu Trung</strong> · THPT Trần Phú<br>
+    📞 0964 848 989
+  </div>
+</header>
+
+<div class="hero">
+  <h1>Ôn thi SAT — Chương trình Toán 10</h1>
+  <p>Hệ thống lý thuyết theo 9 chủ đề trọng tâm, kèm <b>5 bộ đề luyện thi chuẩn SAT</b> (30 câu/bộ).
+     Sau khi nộp bài, hệ thống tự chấm và chỉ ra <b>chủ đề kiến thức</b> em cần ôn lại.</p>
+  <div class="badge">SAT · MATH · GRADE 10</div>
+</div>
+
+<section class="container">
+  <h2>📚 9 chủ đề ôn tập</h2>
+  <p class="section-sub">Nhấn vào thẻ để mở trang lý thuyết & bài tập tương ứng.</p>
+  <div class="topic-grid" id="topic-grid"></div>
+</section>
+
+<section class="container" id="tests">
+  <h2>📝 Bộ đề luyện thi chuẩn SAT</h2>
+  <p class="section-sub">Mỗi bộ gồm <b>20 câu trắc nghiệm</b> (4 đáp án) và <b>10 câu điền đáp án</b>.
+     Làm xong nhấn <b>Nộp bài</b> để xem điểm & chủ đề cần ôn.</p>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-set="0">Bộ đề 1</button>
+    <button class="tab" data-set="1">Bộ đề 2</button>
+    <button class="tab" data-set="2">Bộ đề 3</button>
+    <button class="tab" data-set="3">Bộ đề 4</button>
+    <button class="tab" data-set="4">Bộ đề 5</button>
+  </div>
+
+  <div class="results" id="results"></div>
+  <div id="test-area"></div>
+
+  <div class="submit-bar">
+    <div class="progress-info">Đã làm: <span id="answered-count">0</span> / <span id="total-count">30</span></div>
+    <button class="btn-submit" id="btn-submit">NỘP BÀI</button>
+  </div>
+</section>
+
+<footer>
+  <div class="fbrand">SAT <span>MATH 10</span> · Ôn thi chuẩn SAT</div>
+  <p>Thiết kế bởi <strong>Thầy Nguyễn Hữu Trung</strong> — THPT Trần Phú</p>
+  <p class="contact">📞 <a href="tel:0964848989">0964 848 989</a></p>
+</footer>
+
+<script>
+/* ====================== DỮ LIỆU CHỦ ĐỀ ====================== */
+const TOPICS = {
+  t1:{name:"Hệ thức lượng trong tam giác",url:"https://trungnhvp-cell.github.io/SAT-he-thuc-luong-trong-tam-giac/"},
+  t2:{name:"Hệ bất phương trình bậc nhất hai ẩn",url:"https://trungnhvp-cell.github.io/SAT-H-b-t-ph-ng-tr-nh-b-c-nh-t-hai-n/"},
+  t3:{name:"Ba đường cô nic và ứng dụng",url:"https://trungnhvp-cell.github.io/SAT-ba-ng-c-nic-v-ng-d-ng/"},
+  t4:{name:"Phương trình đường thẳng, đường tròn",url:"https://trungnhvp-cell.github.io/SAT-ph-ng-tr-nh-ng-th-ng-ph-ng-tr-nh-ng-tr-n/"},
+  t5:{name:"Vectơ, tích vô hướng và ứng dụng",url:"https://trungnhvp-cell.github.io/SAT-c-c-ph-p-to-n-vec-t-t-ch-v-h-ng-v-ng-d-ng/"},
+  t6:{name:"Hàm số bậc hai, tam thức bậc hai",url:"https://trungnhvp-cell.github.io/SAT-h-m-s-b-c-hai.-tam-th-c-b-c-hai-v-ng-d-ng/"},
+  t7:{name:"Quy tắc đếm, tổ hợp, nhị thức Newton",url:"https://trungnhvp-cell.github.io/SAT-quy-t-c-m-ho-n-v-ch-nh-h-p-t-h-p-v-nh-th-c-Newton/"},
+  t8:{name:"Tập hợp và mệnh đề",url:"https://trungnhvp-cell.github.io/t-p-h-p-v-m-nh-/"},
+  t9:{name:"Thống kê mẫu số liệu không ghép nhóm",url:"https://trungnhvp-cell.github.io/SAT-th-ng-k-kh-ng-gh-p-nh-m-10/"}
+};
+
+/* ====================== 5 BỘ ĐỀ ====================== */
+const SETS = [
+/* ---------- BỘ ĐỀ 1 ---------- */
+{
+name:"Bộ đề 1",
+questions:[
+{topic:"t1",type:"mcq",q:"Tam giác ABC có a = 8, b = 6, góc C = 60°. Độ dài cạnh c bằng?",opts:["2√13","4√13","2√7","√22"],ans:0},
+{topic:"t1",type:"mcq",q:"Tam giác ABC có góc A = 30°, B = 45°, a = 6. Độ dài cạnh b bằng?",opts:["3√2","6√2","12√2","√6"],ans:1},
+{topic:"t2",type:"mcq",q:"Điểm nào sau đây thuộc miền nghiệm của hệ: x + y ≥ 2, x − y ≤ 1, x ≥ 0?",opts:["(0;0)","(1;0)","(1;2)","(2;0)"],ans:2},
+{topic:"t2",type:"mcq",q:"Giá trị nhỏ nhất của f(x,y) = 2x + 3y trên miền x ≥ 0, y ≥ 0, x + y ≤ 4 bằng?",opts:["0","8","12","4"],ans:0},
+{topic:"t3",type:"mcq",q:"Elip (E): x²/25 + y²/9 = 1 có tiêu cự bằng?",opts:["4","8","10","16"],ans:1},
+{topic:"t3",type:"mcq",q:"Parabol (P): y² = 8x có tiêu điểm là?",opts:["(0;2)","(2;0)","(4;0)","(0;4)"],ans:1},
+{topic:"t4",type:"mcq",q:"Đường thẳng qua A(1;2) và B(3;6) có hệ số góc bằng?",opts:["1/2","2","−2","4"],ans:1},
+{topic:"t4",type:"mcq",q:"Đường tròn (x − 2)² + (y + 1)² = 9 có tâm và bán kính là?",opts:["I(2;−1), R = 3","I(−2;1), R = 3","I(2;−1), R = 9","I(−2;1), R = 9"],ans:0},
+{topic:"t5",type:"mcq",q:"Cho a = (3;−2), b = (1;4). Tích vô hướng a·b bằng?",opts:["−5","5","11","−11"],ans:0},
+{topic:"t5",type:"mcq",q:"Cho a = (2;3), b = (−1;2). Góc giữa a và b (làm tròn) gần nhất với?",opts:["30°","45°","60°","90°"],ans:2},
+{topic:"t6",type:"mcq",q:"Parabol y = x² − 4x + 3 có đỉnh là?",opts:["(2;−1)","(−2;−1)","(2;1)","(2;3)"],ans:0},
+{topic:"t6",type:"mcq",q:"Tam thức x² − 5x + 6 nhận giá trị âm khi?",opts:["x < 2 hoặc x > 3","2 < x < 3","x < 3","x > 2"],ans:1},
+{topic:"t7",type:"mcq",q:"Có bao nhiêu cách xếp 5 học sinh vào 5 ghế?",opts:["5","25","120","720"],ans:2},
+{topic:"t7",type:"mcq",q:"Hệ số của x³ trong khai triển (x + 2)⁵ bằng?",opts:["10","20","40","80"],ans:2},
+{topic:"t8",type:"mcq",q:"Cho A = {1;2;3}, B = {2;3;4}. Tập A ∩ B bằng?",opts:["{1;4}","{2;3}","{1;2;3;4}","∅"],ans:1},
+{topic:"t8",type:"mcq",q:"Khẳng định ∀x ∈ ℝ, x² ≥ 0 là đúng hay sai?",opts:["Đúng","Sai","Không xác định","Chỉ đúng khi x > 0"],ans:0},
+{topic:"t9",type:"mcq",q:"Mẫu số liệu: 2, 4, 4, 6, 9. Số trung bình bằng?",opts:["4","4,5","5","5,5"],ans:2},
+{topic:"t9",type:"mcq",q:"Mẫu số liệu: 1, 3, 5, 7, 9. Phương sai (dân số) bằng?",opts:["4","8","10","16"],ans:1},
+{topic:"t1",type:"mcq",q:"Tam giác có ba cạnh 3, 4, 5. Diện tích tam giác bằng?",opts:["6","10","12","30"],ans:0},
+{topic:"t4",type:"mcq",q:"Khoảng cách từ M(1;2) đến đường thẳng 3x + 4y − 5 = 0 bằng?",opts:["1","1,2","2","5"],ans:1},
+{topic:"t1",type:"fill",q:"Tam giác ABC có a = 7, b = 8, c = 9. Tính cos A (nhập phân số a/b hoặc số thập phân).",ans:"2/3"},
+{topic:"t2",type:"fill",q:"Miền nghiệm của hệ x + y ≤ 6, x ≥ 0, y ≥ 0 có diện tích bằng?",ans:"18"},
+{topic:"t3",type:"fill",q:"Elip x²/16 + y²/7 = 1 có độ dài trục lớn bằng?",ans:"8"},
+{topic:"t4",type:"fill",q:"Đường tròn x² + y² − 4x + 6y − 3 = 0 có bán kính bằng?",ans:"4"},
+{topic:"t5",type:"fill",q:"Cho |a| = 3, |b| = 4, góc giữa a và b bằng 60°. Tính |a + b| (nhập √37 hoặc số thập phân).",ans:"√37"},
+{topic:"t6",type:"fill",q:"Tổng các nghiệm của phương trình x² − 5x + 6 = 0 bằng?",ans:"5"},
+{topic:"t7",type:"fill",q:"Giá trị của C(8,3) bằng?",ans:"56"},
+{topic:"t8",type:"fill",q:"Số tập con của một tập có 4 phần tử bằng?",ans:"16"},
+{topic:"t9",type:"fill",q:"Trung vị của mẫu 3, 5, 7, 9, 11, 13 bằng?",ans:"8"},
+{topic:"t4",type:"fill",q:"Góc giữa hai đường thẳng y = √3·x và y = 0 (theo độ) bằng?",ans:"60"}
+]},
+
+/* ---------- BỘ ĐỀ 2 ---------- */
+{
+name:"Bộ đề 2",
+questions:[
+{topic:"t1",type:"mcq",q:"Tam giác ABC có a = 5, b = 7, góc C = 120°. Giá trị c² bằng?",opts:["79","109","99","39"],ans:1},
+{topic:"t1",type:"mcq",q:"Tam giác ABC có b = 4, c = 5, góc A = 60°. Diện tích tam giác bằng?",opts:["5√3","10√3","5","10"],ans:0},
+{topic:"t2",type:"mcq",q:"Cặp (x;y) nào thuộc miền nghiệm của hệ x − y ≥ 1, x + y ≤ 3, x ≥ 0?",opts:["(0;1)","(1;0)","(0;0)","(3;1)"],ans:1},
+{topic:"t2",type:"mcq",q:"Giá trị lớn nhất của f = x + y trên miền 0 ≤ x ≤ 3, 0 ≤ y ≤ 2 là?",opts:["3","5","6","2"],ans:1},
+{topic:"t3",type:"mcq",q:"Hyperbol x²/9 − y²/16 = 1 có tiêu cự bằng?",opts:["6","8","10","14"],ans:2},
+{topic:"t3",type:"mcq",q:"Elip x²/36 + y²/16 = 1 có độ dài trục nhỏ bằng?",opts:["6","8","12","4"],ans:1},
+{topic:"t4",type:"mcq",q:"Đường thẳng (d): 2x − 3y + 6 = 0 có một vectơ pháp tuyến là?",opts:["(2;3)","(2;−3)","(3;2)","(−3;2)"],ans:1},
+{topic:"t4",type:"mcq",q:"Đường tròn đường kính AB với A(1;2), B(5;4) có bán kính bằng?",opts:["√5","2√5","5","√20"],ans:0},
+{topic:"t5",type:"mcq",q:"Cho a = (1;−2), b = (3;1). Tích vô hướng a·b bằng?",opts:["1","−1","5","−5"],ans:0},
+{topic:"t5",type:"mcq",q:"Cho a = (4;3). Độ dài |a| bằng?",opts:["3","4","5","7"],ans:2},
+{topic:"t6",type:"mcq",q:"Parabol y = −x² + 2x + 3 có giá trị lớn nhất bằng?",opts:["3","4","5","2"],ans:1},
+{topic:"t6",type:"mcq",q:"Tập nghiệm của bất phương trình x² − 4 ≤ 0 là?",opts:["x ≤ −2","−2 ≤ x ≤ 2","x ≤ 2","x ≥ 2"],ans:1},
+{topic:"t7",type:"mcq",q:"Số hoán vị của 4 phần tử bằng?",opts:["4","12","24","16"],ans:2},
+{topic:"t7",type:"mcq",q:"Giá trị của A(5,2) bằng?",opts:["10","20","60","120"],ans:1},
+{topic:"t8",type:"mcq",q:"Cho A = [1;5], B = [3;7]. Tập A ∩ B bằng?",opts:["[1;7]","[3;5]","[1;3]","[5;7]"],ans:1},
+{topic:"t8",type:"mcq",q:"Phủ định của mệnh đề ∃x ∈ ℝ, x² < 0 là:",opts:["∀x, x² < 0","∀x, x² ≥ 0","∃x, x² ≥ 0","∃x, x² > 0"],ans:1},
+{topic:"t9",type:"mcq",q:"Mẫu 3, 5, 5, 7, 10 có mốt bằng?",opts:["3","5","6","10"],ans:1},
+{topic:"t9",type:"mcq",q:"Mẫu 2, 4, 6, 8 có độ lệch chuẩn (dân số) bằng?",opts:["√5","5","√2,5","2"],ans:0},
+{topic:"t1",type:"mcq",q:"Tam giác đều cạnh 2 có bán kính đường tròn ngoại tiếp bằng?",opts:["1","2√3/3","√3","2"],ans:1},
+{topic:"t2",type:"mcq",q:"Hệ bất phương trình x + y ≤ 3, x ≥ 0, y ≥ 0 có miền nghiệm là hình gì?",opts:["Tam giác","Nửa mặt phẳng","Đoạn thẳng","Một điểm"],ans:0},
+{topic:"t1",type:"fill",q:"Tam giác có a = 3, b = 5, góc C = 60°. Tính c (nhập √19 hoặc số thập phân).",ans:"√19"},
+{topic:"t2",type:"fill",q:"Cho x + y ≤ 4, x ≥ 0, y ≥ 0. Giá trị lớn nhất của 2x + y bằng?",ans:"8"},
+{topic:"t3",type:"fill",q:"Parabol y² = 4x có tiêu điểm (a;0). Giá trị a bằng?",ans:"1"},
+{topic:"t4",type:"fill",q:"Đường tròn x² + y² + 2x − 4y − 4 = 0 có bán kính bằng?",ans:"3"},
+{topic:"t5",type:"fill",q:"Cho a = (1;2), b = (2;−1). Tích vô hướng a·b bằng?",ans:"0"},
+{topic:"t6",type:"fill",q:"Nghiệm lớn nhất của x² − 7x + 12 = 0 bằng?",ans:"4"},
+{topic:"t7",type:"fill",q:"Giá trị của C(6,2) bằng?",ans:"15"},
+{topic:"t8",type:"fill",q:"Tập A có 5 phần tử. Số tập con khác rỗng của A bằng?",ans:"31"},
+{topic:"t9",type:"fill",q:"Khoảng biến thiên của mẫu 2, 5, 8, 11, 14 bằng?",ans:"12"},
+{topic:"t4",type:"fill",q:"Khoảng cách từ O(0;0) đến đường thẳng 3x − 4y + 10 = 0 bằng?",ans:"2"}
+]},
+
+/* ---------- BỘ ĐỀ 3 ---------- */
+{
+name:"Bộ đề 3",
+questions:[
+{topic:"t1",type:"mcq",q:"Tam giác ABC có A = 45°, B = 75°, c = 2. Độ dài cạnh a bằng?",opts:["2√6/3","√6/3","2/√3","√2"],ans:0},
+{topic:"t1",type:"mcq",q:"Tam giác có ba cạnh 5, 12, 13. Bán kính đường tròn nội tiếp bằng?",opts:["1","2","3","4"],ans:1},
+{topic:"t2",type:"mcq",q:"Cặp nào sau đây KHÔNG thuộc miền x − 2y < 0?",opts:["(0;1)","(1;1)","(3;1)","(2;2)"],ans:2},
+{topic:"t2",type:"mcq",q:"Hệ bất phương trình nào có miền nghiệm là một tam giác?",opts:["x ≥ 0, y ≥ 0, x + y ≤ 1","x + y ≥ 1","x + y ≤ 1","x ≥ 0"],ans:0},
+{topic:"t3",type:"mcq",q:"Elip x²/100 + y²/36 = 1 có tiêu cự bằng?",opts:["8","16","20","12"],ans:1},
+{topic:"t3",type:"mcq",q:"Hyperbol x²/16 − y²/9 = 1 có hai đường tiệm cận là?",opts:["y = ±(3/4)x","y = ±(4/3)x","y = ±(9/16)x","y = ±x"],ans:0},
+{topic:"t4",type:"mcq",q:"Đường tròn tâm I(1;−2), bán kính R = 3 có phương trình là?",opts:["(x−1)²+(y+2)²=9","(x+1)²+(y−2)²=9","(x−1)²+(y−2)²=3","(x+1)²+(y+2)²=3"],ans:0},
+{topic:"t4",type:"mcq",q:"Đường thẳng qua M(2;1), song song với y = 3x − 2 có phương trình là?",opts:["y = 3x − 5","y = 3x + 1","y = −x/3 + 5/3","y = 3x + 5"],ans:0},
+{topic:"t5",type:"mcq",q:"Cho a = (1;2), b = (−2;1). Khẳng định nào đúng?",opts:["a ⊥ b","a ∥ b","|a| = |b| = √5 và a, b cùng hướng","a, b cùng phương"],ans:0},
+{topic:"t5",type:"mcq",q:"Cho hình vuông ABCD cạnh a. Tích vô hướng AB·AC bằng?",opts:["a²","a²√2","2a²","0"],ans:0},
+{topic:"t6",type:"mcq",q:"Parabol y = x² − 2x − 3 cắt trục Ox tại các điểm có hoành độ là?",opts:["x = 1, x = 3","x = −1, x = 3","x = 1, x = −3","x = −1, x = −3"],ans:1},
+{topic:"t6",type:"mcq",q:"Tập nghiệm của bất phương trình x² + 1 > 0 là?",opts:["ℝ","∅","(0; +∞)","(−1; 1)"],ans:0},
+{topic:"t7",type:"mcq",q:"Từ các chữ số {1;2;3;4;5} lập được bao nhiêu số tự nhiên có 3 chữ số khác nhau?",opts:["60","125","10","120"],ans:0},
+{topic:"t7",type:"mcq",q:"Tổng tất cả các hệ số trong khai triển (1 + x)⁴ bằng?",opts:["8","16","15","32"],ans:1},
+{topic:"t8",type:"mcq",q:"Cho A = {x ∈ ℤ | −2 < x ≤ 3}. Số phần tử của A bằng?",opts:["4","5","6","3"],ans:1},
+{topic:"t8",type:"mcq",q:"Khẳng định ∀x ∈ ℝ, x² − 2x + 2 > 0 là đúng hay sai?",opts:["Đúng","Sai","Không xác định","Chỉ đúng với x > 1"],ans:0},
+{topic:"t9",type:"mcq",q:"Mẫu 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 có số trung bình bằng?",opts:["5","5,5","6","6,5"],ans:1},
+{topic:"t9",type:"mcq",q:"Mẫu 10, 12, 14, 16, 18 có phương sai (dân số) bằng?",opts:["4","8","10","16"],ans:1},
+{topic:"t1",type:"mcq",q:"Tam giác ABC có a = 2, b = 3, c = 4. Giá trị cos A bằng?",opts:["7/8","1/8","3/4","1/4"],ans:0},
+{topic:"t3",type:"mcq",q:"Phương trình chính tắc của elip có a = 5, b = 3 là?",opts:["x²/25 + y²/9 = 1","x²/9 + y²/25 = 1","x²/25 − y²/9 = 1","x²/5 + y²/3 = 1"],ans:0},
+{topic:"t1",type:"fill",q:"Tam giác ABC có a = 6, b = 8, c = 10. Bán kính đường tròn ngoại tiếp bằng?",ans:"5"},
+{topic:"t2",type:"fill",q:"Miền nghiệm của hệ x + y ≤ 6, x − y ≤ 2, x ≥ 0, y ≥ 0 có diện tích bằng?",ans:"14"},
+{topic:"t3",type:"fill",q:"Hyperbol x²/25 − y²/144 = 1 có tiêu cự bằng?",ans:"26"},
+{topic:"t4",type:"fill",q:"Đường tròn x² + y² − 6x + 2y + 6 = 0 có bán kính bằng?",ans:"2"},
+{topic:"t5",type:"fill",q:"Cho |a| = 2, |b| = 3, góc giữa a và b bằng 120°. Tính a·b.",ans:"-3"},
+{topic:"t6",type:"fill",q:"Gọi x₁, x₂ là nghiệm của x² − 4x + 1 = 0. Tính x₁² + x₂².",ans:"14"},
+{topic:"t7",type:"fill",q:"Hệ số của x² trong khai triển (x + 2)⁵ bằng?",ans:"80"},
+{topic:"t8",type:"fill",q:"Cho A = {1;2;3;4}, B = {2;4;6}. Số phần tử của A ∪ B bằng?",ans:"5"},
+{topic:"t9",type:"fill",q:"Mẫu 5, 6, 7, 8, 9, 10 có độ lệch chuẩn (dân số, làm tròn 2 chữ số) bằng?",ans:"1.71"},
+{topic:"t1",type:"fill",q:"Tam giác có a = b = √3, góc C = 60°. Tính c (nhập √3 hoặc số thập phân).",ans:"√3"}
+]},
+
+/* ---------- BỘ ĐỀ 4 ---------- */
+{
+name:"Bộ đề 4",
+questions:[
+{topic:"t1",type:"mcq",q:"Tam giác ABC có a = 6, b = 8, c = 10. Diện tích tam giác bằng?",opts:["24","12","30","48"],ans:0},
+{topic:"t1",type:"mcq",q:"Tam giác có a = 5, b = 8, góc C = 60°. Độ dài cạnh c bằng?",opts:["7","√39","3√7","√89"],ans:0},
+{topic:"t1",type:"mcq",q:"Tam giác ABC có A = 60°, B = 45°, b = 4. Độ dài cạnh a bằng?",opts:["2√6","√6","4√3","2√3"],ans:0},
+{topic:"t2",type:"mcq",q:"Miền nghiệm của hệ x + y ≤ 4, x ≥ 0, y ≥ 0 có diện tích bằng?",opts:["4","8","16","2"],ans:1},
+{topic:"t2",type:"mcq",q:"Cặp (x;y) nào thuộc miền nghiệm của hệ x + 2y ≤ 4, x ≥ 0, y ≥ 0?",opts:["(3;2)","(0;3)","(1;1)","(2;2)"],ans:2},
+{topic:"t2",type:"mcq",q:"Giá trị nhỏ nhất của f = 3x + 2y trên miền x + y ≥ 2, x ≥ 0, y ≥ 0 bằng?",opts:["4","6","0","2"],ans:0},
+{topic:"t3",type:"mcq",q:"Elip x²/49 + y²/24 = 1 có tiêu cự bằng?",opts:["5","10","14","7"],ans:1},
+{topic:"t3",type:"mcq",q:"Hyperbol x²/36 − y²/64 = 1 có tiêu cự bằng?",opts:["20","10","12","16"],ans:0},
+{topic:"t3",type:"mcq",q:"Parabol y² = 12x có tiêu điểm là?",opts:["(3;0)","(6;0)","(0;3)","(0;6)"],ans:0},
+{topic:"t4",type:"mcq",q:"Đường thẳng 2x + y − 4 = 0 đi qua điểm nào sau đây?",opts:["(1;2)","(1;1)","(2;1)","(0;0)"],ans:0},
+{topic:"t4",type:"mcq",q:"Khoảng cách từ A(2;1) đến đường thẳng x − 2y + 3 = 0 bằng?",opts:["3√5/5","√5","3","1"],ans:0},
+{topic:"t5",type:"mcq",q:"Cho a = (3;4). Độ dài |a| bằng?",opts:["3","4","5","7"],ans:2},
+{topic:"t5",type:"mcq",q:"Cho a = (2;−1), b = (3;1). Tích vô hướng a·b bằng?",opts:["5","7","−5","1"],ans:0},
+{topic:"t6",type:"mcq",q:"Parabol y = 2x² − 4x + 1 có đỉnh là?",opts:["(1;−1)","(−1;−1)","(1;1)","(2;−1)"],ans:0},
+{topic:"t6",type:"mcq",q:"Tam thức −x² + 4x − 3 nhận giá trị dương khi?",opts:["1 < x < 3","x < 1 hoặc x > 3","x < 3","x > 1"],ans:0},
+{topic:"t7",type:"mcq",q:"Số cách chọn 3 học sinh từ 10 học sinh bằng?",opts:["30","120","720","1000"],ans:1},
+{topic:"t7",type:"mcq",q:"Hệ số của x⁴ trong khai triển (x + 1)⁵ bằng?",opts:["1","5","10","25"],ans:1},
+{topic:"t8",type:"mcq",q:"Mệnh đề ∀x ∈ ℝ, x² + 1 > 0 là:",opts:["Đúng","Sai","Chỉ đúng với x > 0","Không xác định"],ans:0},
+{topic:"t9",type:"mcq",q:"Mẫu 2, 3, 3, 5, 7 có số trung vị bằng?",opts:["2","3","5","4"],ans:1},
+{topic:"t9",type:"mcq",q:"Mẫu 4, 6, 8, 10, 12 có số trung bình bằng?",opts:["6","7","8","10"],ans:2},
+{topic:"t1",type:"fill",q:"Tam giác có a = 4, b = 5, góc C = 60°. Tính c² (nhập số nguyên).",ans:"21"},
+{topic:"t2",type:"fill",q:"Cho x + 2y ≤ 6, x ≥ 0, y ≥ 0. Giá trị lớn nhất của f = x + y bằng?",ans:"6"},
+{topic:"t3",type:"fill",q:"Elip x²/100 + y²/64 = 1 có tiêu cự bằng?",ans:"12"},
+{topic:"t4",type:"fill",q:"Đường tròn (x − 1)² + (y + 2)² = 25 có bán kính bằng?",ans:"5"},
+{topic:"t5",type:"fill",q:"Cho |a| = 1, |b| = 2, góc giữa a và b bằng 60°. Tính a·b.",ans:"1"},
+{topic:"t6",type:"fill",q:"Tổng các nghiệm của phương trình x² − 8x + 12 = 0 bằng?",ans:"8"},
+{topic:"t7",type:"fill",q:"Giá trị của 4! bằng?",ans:"24"},
+{topic:"t8",type:"fill",q:"Cho A = {1;2;3;4;5}, B = {2;4}. Số phần tử của A \\ B bằng?",ans:"3"},
+{topic:"t9",type:"fill",q:"Số trung bình của mẫu 4, 6, 8, 10, 12 bằng?",ans:"8"},
+{topic:"t9",type:"fill",q:"Phương sai (dân số) của mẫu 1, 3, 5, 7 bằng?",ans:"5"}
+]},
+
+/* ---------- BỘ ĐỀ 5 ---------- */
+{
+name:"Bộ đề 5",
+questions:[
+{topic:"t1",type:"mcq",q:"Tam giác có ba cạnh 8, 15, 17. Diện tích tam giác bằng?",opts:["60","120","68","136"],ans:0},
+{topic:"t1",type:"mcq",q:"Tam giác ABC có b = 6, c = 8, góc A = 120°. Giá trị a² bằng?",opts:["148","100","52","196"],ans:0},
+{topic:"t1",type:"mcq",q:"Tam giác ABC vuông tại A có a = 10 (cạnh huyền), b = 6. Bán kính đường tròn ngoại tiếp bằng?",opts:["5","10","3","6"],ans:0},
+{topic:"t2",type:"mcq",q:"Miền nghiệm của hệ x − y ≤ 2, x + y ≤ 4, x ≥ 0, y ≥ 0 có diện tích bằng?",opts:["7","8","6","9"],ans:0},
+{topic:"t2",type:"mcq",q:"Cặp nào sau đây KHÔNG thuộc miền nghiệm của hệ x + 3y ≤ 6, x ≥ 0, y ≥ 0?",opts:["(3;0)","(1;2)","(0;2)","(2;1)"],ans:1},
+{topic:"t2",type:"mcq",q:"Giá trị lớn nhất của f = 2x + 3y trên miền 0 ≤ x ≤ 4, 0 ≤ y ≤ 3 bằng?",opts:["17","13","12","14"],ans:0},
+{topic:"t3",type:"mcq",q:"Elip x²/169 + y²/144 = 1 có tiêu cự bằng?",opts:["5","10","13","24"],ans:1},
+{topic:"t3",type:"mcq",q:"Hyperbol x²/9 − y²/7 = 1 có tiêu cự bằng?",opts:["8","4","6","10"],ans:0},
+{topic:"t3",type:"mcq",q:"Parabol y² = 20x có tiêu điểm là?",opts:["(5;0)","(10;0)","(0;5)","(0;10)"],ans:0},
+{topic:"t4",type:"mcq",q:"Đường thẳng song song với y = 2x + 1 và đi qua A(0;3) có phương trình là?",opts:["y = 2x + 3","y = −2x + 3","y = 2x − 3","y = x + 3"],ans:0},
+{topic:"t4",type:"mcq",q:"Đường tròn x² + y² − 2x + 4y − 4 = 0 có tâm là?",opts:["(1;−2)","(−1;2)","(2;−4)","(−2;4)"],ans:0},
+{topic:"t5",type:"mcq",q:"Cho a = (1;0), b = (1;1). Góc giữa a và b bằng?",opts:["30°","45°","60°","90°"],ans:1},
+{topic:"t5",type:"mcq",q:"Cho a = (2;m), b = (1;−3). Để a ⊥ b thì m bằng?",opts:["2/3","−2/3","3/2","6"],ans:0},
+{topic:"t6",type:"mcq",q:"Parabol y = x² + 2x − 3 có trục đối xứng là đường thẳng?",opts:["x = −1","x = 1","x = 2","x = −2"],ans:0},
+{topic:"t6",type:"mcq",q:"Tập nghiệm của bất phương trình x² − x − 6 < 0 là?",opts:["−2 < x < 3","x < −2 hoặc x > 3","x < 3","x > −2"],ans:0},
+{topic:"t7",type:"mcq",q:"Từ 5 nam và 4 nữ, chọn 2 nam và 1 nữ. Số cách chọn bằng?",opts:["20","40","60","80"],ans:1},
+{topic:"t7",type:"mcq",q:"Số hạng thứ 3 (theo số mũ giảm dần) trong khai triển (x + 2)⁴ là?",opts:["6x²","24x²","8x³","32x"],ans:1},
+{topic:"t8",type:"mcq",q:"Cho A = [−1;3], B = (1;5). Tập A ∩ B bằng?",opts:["(1;3]","[1;3]","[−1;5]","(1;5)"],ans:0},
+{topic:"t9",type:"mcq",q:"Mẫu 1, 2, 2, 3, 4, 4, 4, 5 có mốt bằng?",opts:["2","3","4","5"],ans:2},
+{topic:"t9",type:"mcq",q:"Mẫu 5, 7, 9, 11, 13 có độ lệch chuẩn (dân số) bằng?",opts:["2√2","4","2","8"],ans:0},
+{topic:"t1",type:"fill",q:"Tam giác có a = 3, b = 5, c = 7. Giá trị cos C bằng? (nhập phân số a/b hoặc số thập phân)",ans:"-1/2"},
+{topic:"t2",type:"fill",q:"Cho x + y ≤ 5, x ≥ 0, y ≥ 0. Giá trị lớn nhất của f = 3x + 2y bằng?",ans:"15"},
+{topic:"t3",type:"fill",q:"Elip x²/25 + y²/16 = 1 có tiêu cự bằng?",ans:"6"},
+{topic:"t4",type:"fill",q:"Khoảng cách từ O(0;0) đến đường thẳng 4x − 3y + 10 = 0 bằng?",ans:"2"},
+{topic:"t5",type:"fill",q:"Cho a = (2;1), b = (1;−2). Tính a·b.",ans:"0"},
+{topic:"t6",type:"fill",q:"Tích các nghiệm của phương trình x² − 7x + 10 = 0 bằng?",ans:"10"},
+{topic:"t7",type:"fill",q:"Giá trị của C(7,2) bằng?",ans:"21"},
+{topic:"t8",type:"fill",q:"Tập A có 6 phần tử. Số tập con của A bằng?",ans:"64"},
+{topic:"t9",type:"fill",q:"Trung vị của mẫu 4, 7, 8, 9, 12, 15 bằng?",ans:"8.5"},
+{topic:"t9",type:"fill",q:"Khoảng biến thiên của mẫu 3, 8, 5, 12, 9 bằng?",ans:"9"}
+]}
+];
+
+/* ====================== TIỆN ÍCH ====================== */
+function toNumber(s){
+  if(/^-?\d+(\.\d+)?$/.test(s)) return parseFloat(s);
+  if(/^-?\d+(\.\d+)?\/-?\d+(\.\d+)?$/.test(s)){const [p,q]=s.split('/');return parseFloat(p)/parseFloat(q);}
+  const m1=s.match(/^√(-?\d+(?:\.\d+)?)$/); if(m1) return Math.sqrt(parseFloat(m1[1]));
+  const m2=s.match(/^(-?\d+(?:\.\d+)?)√(\d+(?:\.\d+)?)$/);
+  if(m2) return parseFloat(m2[1])*Math.sqrt(parseFloat(m2[2]));
+  return null;
+}
+function checkFill(input, correct){
+  const clean=s=>s.trim().toLowerCase().replace(/,/g,'.').replace(/\s+/g,'').replace(/^\+/,'');
+  const a=clean(input), c=clean(correct);
+  if(a===c) return true;
+  const nA=toNumber(a), nC=toNumber(c);
+  if(nA!==null && nC!==null){
+    if(Math.abs(nA-nC)<0.015) return true;
+    if(nC!==0 && Math.abs((nA-nC)/nC)<0.01) return true;
+  }
+  return false;
+}
+
+/* ====================== RENDER TOPIC GRID ====================== */
+const grid = document.getElementById('topic-grid');
+grid.innerHTML = Object.entries(TOPICS).map(([k,t],i)=>`
+  <a class="topic-card" href="${t.url}" target="_blank" rel="noopener">
+    <div class="topic-num">CHỦ ĐỀ ${String(i+1).padStart(2,'0')}</div>
+    <h3>${t.name}</h3>
+    <span class="go">Xem lý thuyết & bài tập →</span>
+  </a>
+`).join('');
+
+/* ====================== RENDER TEST ====================== */
+let currentSet = 0;
+const testArea = document.getElementById('test-area');
+
+function renderQuestion(q,i){
+  const n=i+1;
+  if(q.type==='mcq'){
+    return `<div class="q" data-idx="${i}" data-type="mcq">
+      <div class="q-head"><div class="q-num">${n}</div>
+        <div class="q-text"><span class="q-type">Trắc nghiệm</span><div>${q.q}</div></div></div>
+      <div class="options">
+        ${q.opts.map((o,j)=>`
+          <div class="option" data-j="${j}">
+            <input type="radio" name="q${i}" value="${j}">
+            <span class="letter">${String.fromCharCode(65+j)}</span>
+            <span>${o}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }
+  return `<div class="q" data-idx="${i}" data-type="fill">
+    <div class="q-head"><div class="q-num">${n}</div>
+      <div class="q-text"><span class="q-type fill">Điền đáp án</span><div>${q.q}</div></div></div>
+    <div class="fill-input"><input type="text" data-idx="${i}" placeholder="Nhập đáp án..." autocomplete="off"></div>
+    <div class="answer-feedback" data-fb="${i}"></div>
+  </div>`;
+}
+
+function renderSet(idx){
+  currentSet = idx;
+  const set = SETS[idx];
+  testArea.innerHTML = set.questions.map(renderQuestion).join('');
+  document.getElementById('total-count').textContent = set.questions.length;
+  document.getElementById('answered-count').textContent = '0';
+  document.getElementById('btn-submit').disabled = false;
+
+  testArea.querySelectorAll('.option').forEach(opt=>{
+    opt.addEventListener('click', ()=>{
+      if(opt.closest('.q').classList.contains('correct')||opt.closest('.q').classList.contains('wrong')) return;
+      opt.parentElement.querySelectorAll('.option').forEach(o=>{
+        o.classList.remove('selected'); o.querySelector('input').checked=false;
+      });
+      opt.classList.add('selected'); opt.querySelector('input').checked=true;
+      updateProgress();
+    });
+  });
+  testArea.querySelectorAll('input[type="text"]').forEach(inp=>{
+    inp.addEventListener('input', updateProgress);
+  });
+}
+
+function updateProgress(){
+  const set = SETS[currentSet];
+  let count=0;
+  set.questions.forEach((q,i)=>{
+    if(q.type==='mcq'){
+      if(document.querySelector(`.q[data-idx="${i}"] input:checked`)) count++;
+    } else {
+      if(document.querySelector(`.q[data-idx="${i}"] input[type="text"]`).value.trim()) count++;
+    }
+  });
+  document.getElementById('answered-count').textContent = count;
+}
+
+/* ====================== SUBMIT ====================== */
+function submitTest(){
+  const set = SETS[currentSet];
+  let correct=0;
+  const wrongByTopic={};
+
+  set.questions.forEach((q,i)=>{
+    const qEl = document.querySelector(`.q[data-idx="${i}"]`);
+    let isCorrect=false;
+
+    if(q.type==='mcq'){
+      const checked = qEl.querySelector('input:checked');
+      const chosen = checked ? parseInt(checked.value) : -1;
+      isCorrect = chosen === q.ans;
+      qEl.querySelectorAll('.option').forEach(opt=>{
+        const j = parseInt(opt.dataset.j);
+        if(j===q.ans) opt.classList.add('correct-opt');
+        if(j===chosen && chosen!==q.ans) opt.classList.add('wrong-opt');
+      });
+    } else {
+      const inp = qEl.querySelector('input[type="text"]');
+      const val = inp.value;
+      isCorrect = checkFill(val, q.ans);
+      inp.classList.add(isCorrect?'correct-input':'wrong-input');
+      inp.disabled = true;
+      const fb = qEl.querySelector('.answer-feedback');
+      fb.classList.add('show', isCorrect?'correct':'wrong');
+      if(isCorrect){ fb.innerHTML = `✓ Chính xác!`; }
+      else {
+        fb.innerHTML = `✗ Chưa đúng. Đáp án đúng: <strong>${q.ans}</strong>
+          <br>📖 Ôn lại: <a href="${TOPICS[q.topic].url}" target="_blank" rel="noopener">${TOPICS[q.topic].name}</a>`;
+      }
+    }
+
+    if(isCorrect){ correct++; qEl.classList.add('correct'); }
+    else { qEl.classList.add('wrong'); wrongByTopic[q.topic]=(wrongByTopic[q.topic]||0)+1; }
+  });
+
+  showResults(correct, set.questions.length, wrongByTopic);
+  document.getElementById('btn-submit').disabled = true;
+}
+
+function showResults(correct, total, wrongByTopic){
+  const wrong = total - correct;
+  const pct = Math.round(correct/total*100);
+  let html = `<h3>📊 Kết quả bài làm</h3>
+    <div class="score-box">
+      <div class="score-item correct-score"><div class="num">${correct}</div><div class="label">Câu đúng</div></div>
+      <div class="score-item wrong-score"><div class="num">${wrong}</div><div class="label">Câu sai</div></div>
+      <div class="score-item"><div class="num">${pct}%</div><div class="label">Tỉ lệ đúng</div></div>
+    </div>`;
+
+  const entries = Object.entries(wrongByTopic);
+  if(entries.length===0){
+    html += `<div class="perfect">🎉 Xuất sắc! Em đã trả lời đúng tất cả ${total} câu.</div>`;
+  } else {
+    html += `<div class="review-section">
+      <h4>📖 Chủ đề cần ôn tập lại (theo câu sai)</h4>
+      ${entries.map(([tid,cnt])=>`
+        <div class="review-topic">
+          <div class="info"><strong>${TOPICS[tid].name}</strong><span>Sai ${cnt} câu</span></div>
+          <a href="${TOPICS[tid].url}" target="_blank" rel="noopener">Ôn lại →</a>
+        </div>`).join('')}
+    </div>`;
+  }
+  html += `<button class="btn-reset" id="btn-reset">🔄 Làm lại bộ đề này</button>`;
+
+  const results = document.getElementById('results');
+  results.innerHTML = html;
+  results.classList.add('show');
+  document.getElementById('btn-reset').addEventListener('click', ()=>{
+    results.classList.remove('show');
+    renderSet(currentSet);
+    document.getElementById('tests').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  results.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ====================== EVENTS ====================== */
+document.getElementById('tabs').addEventListener('click', e=>{
+  const tab = e.target.closest('.tab');
+  if(!tab) return;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');
+  document.getElementById('results').classList.remove('show');
+  renderSet(parseInt(tab.dataset.set));
+});
+
+document.getElementById('btn-submit').addEventListener('click', ()=>{
+  const set = SETS[currentSet];
+  let unanswered = 0;
+  set.questions.forEach((q,i)=>{
+    if(q.type==='mcq'){
+      if(!document.querySelector(`.q[data-idx="${i}"] input:checked`)) unanswered++;
+    } else {
+      if(!document.querySelector(`.q[data-idx="${i}"] input[type="text"]`).value.trim()) unanswered++;
+    }
+  });
+  if(unanswered>0 && !confirm(`Em còn ${unanswered} câu chưa trả lời. Vẫn nộp bài?`)) return;
+  submitTest();
+});
+
+/* Khởi tạo */
+renderSet(0);
+</script>
+</body>
+</html>
